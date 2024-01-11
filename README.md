@@ -1,5 +1,77 @@
 # 50 projects 50 days
 
+## Vite Multipage Setup
+
+The basic way is to do this, where you go to `vite.config.ts` and under `build.rollupOptions`, you specify the exact files to make assets from.
+
+In the vite config we can specify multiple entry points:
+
+```ts
+import { defineConfig } from "vite";
+import { resolve } from "path";
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: {
+        // include index.html and sre/day1/index.html as entrypoints
+        index: resolve(__dirname, "./index.html"),
+        day1: resolve(__dirname, "src/day1/index.html"),
+      },
+    },
+  },
+});
+```
+
+For a more programattic setup walking through all the directories you want to find, feel free to inspect this code:
+
+```ts
+import { defineConfig } from "vite";
+import { resolve, join, sep } from "path";
+import * as fs from "fs";
+function getAllIndexHtmlFilePaths(dir: string): string[] {
+  const filepaths: string[] = [];
+  const files = fs.readdirSync(dir);
+
+  for (const file of files) {
+    const filePath = join(dir, file);
+    const stat = fs.statSync(filePath);
+
+    if (stat.isDirectory()) {
+      filepaths.push(...getAllIndexHtmlFilePaths(filePath));
+    } else if (file === "index.html") {
+      filepaths.push(filePath);
+    }
+  }
+
+  return filepaths;
+}
+
+// gets all fielpaths that have index.html in the src directory, like src/day1/index.html
+const indexHtmlFilePaths = getAllIndexHtmlFilePaths("src");
+
+let days = indexHtmlFilePaths.map((path) => {
+  return {
+    [path.split(sep)[1]]: resolve(__dirname, path),
+  };
+});
+
+const newDays = days.reduce((acc, cur) => {
+  return { ...acc, ...cur };
+}, {});
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: {
+        index: resolve(__dirname, "./index.html"),
+        ...newDays,
+      },
+    },
+  },
+});
+```
+
 ## Day 1 - Expanding Cards
 
 We have a flex container, each with a **panel**, which is a div with a background image. We set a large height to the flex container, and have the panels stretch to fill the container.
@@ -859,3 +931,212 @@ And here would be an example of HTML using the skeleton loading classes:
 ```
 
 Go [here](src/day24/index.html) to see the example
+
+## Day 27 - Toasts
+
+### Toast Container
+
+We will have a toast container with the id of `#toasts`, which will have fixed positioning and live at the bottom of the page.
+
+It will be where all the toasts live.
+
+```html
+<div id="toasts"></div>
+```
+
+```scss
+// toast container
+#toasts {
+  // 1. fix position and give high z-index
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+
+  // 2. for spacing between toasts
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+```
+
+### Creating a toast
+
+Before going into the amazing toast manager class, let's talk about the basics of making a toast.
+
+1. Create a toast element, applying the `.toast` class
+
+   ```ts
+   // 1. create element
+   const toast = document.createElement("div");
+   // 2. add classes
+   toast.classList.add("toast");
+   toast.classList.add(`toast-${type}`);
+   // 3. Set toast duration for CSS progress bar animation
+   toast.style.setProperty("--toast-duration", `${3000}ms`);
+   toast.innerText = "This is a toast";
+   ```
+
+2. Add the toast to the toast container
+
+   ```ts
+   // 4. add toast to DOM
+   toastContainer.appendChild(toast);
+   ```
+
+3. After toast duration ends, run toast exit animation and remove toast from DOM
+
+   ```ts
+   // 5. after toast duration ends, run exit animation and remove toast from DOM
+   setTimeout(() => {
+     // run exit animation
+     const animation = toast.element.animate(
+       [{ opacity: 0, transform: "translateX(250px)" }],
+       {
+         duration: 250,
+       }
+     );
+     // wait for animation to finish. then remove toast from DOM
+     animation.onfinish = () => {
+       toast.element.remove();
+     };
+   }, 3000);
+   ```
+
+Here is the basic css, including toast variants:
+
+```scss
+.toast {
+  --color: #333;
+  background-color: white;
+  color: var(--color);
+  border: 1px solid #eee;
+  border-radius: 0.5rem;
+  min-width: 8rem;
+  max-width: 15rem;
+  word-wrap: break-word;
+  padding: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: toast 0.4s ease-in-out;
+  overflow: hidden;
+
+  // progress bar
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.25rem;
+    background-color: var(--color);
+    // uses javascript-set css variable to set animation duration for progress bar
+    animation: progress var(--toast-duration) linear both;
+    transform-origin: left;
+  }
+
+  // toast variants
+  &.toast-success {
+    --color: #2ecc71;
+  }
+
+  &.toast-warning {
+    --color: #f1c40f;
+  }
+
+  &.toast-danger {
+    --color: #e74c3c;
+  }
+
+  &.toast-info {
+    --color: #3498db;
+  }
+
+  // progress bar animation
+  @keyframes progress {
+    0% {
+      transform: scaleX(0);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  // enter animation
+  @keyframes toast {
+    0% {
+      transform: translateX(100px);
+      opacity: 0;
+    }
+    85% {
+      transform: translateX(-1rem);
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+```
+
+### Toast Manager class
+
+```ts
+
+```
+
+## Day 30 - TypeWriter Effect
+
+We apply the `typewriter` class to any text element we want to have the typewriter effect.
+
+```html
+<h1 class="typewriter">This is epic.</h1>
+<p class="typewriter">
+  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium fugiat
+  consequatur mollitia dicta eaque saepe quaerat hic non neque possimus quis
+  quibusdam quia voluptatem reiciendis molestiae ipsam placeat illo, tempora
+  aliquid. Voluptatem rem iste quisquam officia voluptatibus impedit obcaecati
+  error.
+</p>
+```
+
+The way we create the typewriter effect is by constantly setting the inner text of the element to be a substring of the original text, adding one char after a delay.
+
+```ts
+const typewriterElements =
+  document.querySelectorAll<HTMLElement>(".typewriter")!;
+
+class TypeWriter {
+  private speed;
+  private currentIndex: number = 1;
+  private timeoutId: number | null = null;
+  private text: string = "";
+  constructor(public element: HTMLElement, charsPerSecond: number = 20) {
+    this.speed = 1000 / charsPerSecond;
+    this.text = element.innerText;
+  }
+
+  write() {
+    // get substring of text
+    const curText = this.text.slice(0, this.currentIndex);
+
+    // end recursive loop if we have reached the end of the text
+    if (this.currentIndex > this.text.length) {
+      return;
+    }
+    this.element.innerText = curText;
+
+    // recursive setTimeout call
+    setTimeout(() => {
+      this.currentIndex++;
+      this.write();
+    }, this.speed);
+  }
+
+  // sets timeout delay for changing typewriter effect speed
+  setSpeed(charsPerSecond: number) {
+    this.speed = 1000 / charsPerSecond;
+  }
+}
+```

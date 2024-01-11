@@ -4,11 +4,27 @@ type ToastManagerOptions = {
 };
 class ToastManager {
   private options: ToastManagerOptions;
-  constructor(
-    private toastContainer: HTMLElement,
-    options?: ToastManagerOptions
-  ) {
+  private toastContainer: HTMLElement;
+  private static instance: HTMLElement;
+  constructor(options?: ToastManagerOptions) {
     this.options = options || { timeout: 3000 };
+
+    if (ToastManager.instance) {
+      this.toastContainer = ToastManager.instance;
+    } else {
+      // create toast container
+      const toastContainer = document.createElement("div");
+      toastContainer.id = "toasts";
+
+      // add toast container to body
+      document.body.appendChild(toastContainer);
+
+      // set toast container
+      this.toastContainer = toastContainer;
+
+      // set instance
+      ToastManager.instance = toastContainer;
+    }
   }
 
   toast(message: string, type: ToastType = "default") {
@@ -84,9 +100,8 @@ class Toast {
 
 const input = document.querySelector("#message") as HTMLInputElement;
 const toastButton = document.querySelector("#show-toast") as HTMLButtonElement;
-const toastContainer = document.getElementById("toasts") as HTMLElement;
 
 toastButton.addEventListener("click", () => {
-  const toastManager = new ToastManager(toastContainer);
+  const toastManager = new ToastManager();
   toastManager.success(input.value);
 });
