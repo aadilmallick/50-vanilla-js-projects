@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="../main.scss" />
+    <link rel="stylesheet" href="style.scss" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>audio</h2>
+      <button id="btn-clap">Clap</button>
+      <button id="btn-boo">Boo</button>
+    </div>
+    <div class="container">
+      <h2>clipboard and image</h2>
+      <img src="gojo.png" alt="" id="gojo" />
+      <button id="paste-button">paste image</button>
+    </div>
+    <div class="container">
+      <h2>web animations JS API</h2>
+      <div class="ball"></div>
+      <button id="play">play</button>
+      <button id="pause">pause</button>
+    </div>
+    <audio src="audio/applause.mp3" id="applause"></audio>
+    <audio src="audio/boo.mp3" id="boo"></audio>
+    <script src="index.ts" type="module" defer></script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+p {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100vh;
+}
+
+$glow-color: #bcf476;
+@keyframes breath {
+  from {
+    animation-timing-function: ease-out;
+  }
+
+  to {
+    transform: scale(1.25) translateY(-5px) perspective(1px);
+    text-shadow: 0 5px 40px $glow-color;
+    animation-timing-function: ease-in-out;
+  }
+}
+
+.text-animation {
+  // in order for transform to work, we need to set display to inline-block
+  span {
+    display: inline-block;
+    white-space: break-spaces;
+  }
+  &[data-letter-animation="wave"] {
+    $brand-color: #84b547;
+    span {
+      transition: transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1),
+        color 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition-delay: calc(var(--index) * 50ms);
+    }
+    &:hover {
+      span {
+        transform: translateY(-5px) perspective(1px);
+        color: $brand-color;
+      }
+    }
+  }
+  &[data-letter-animation="hover"] {
+    &:hover {
+      span {
+        transform: scale(0.75) perspective(1px);
+      }
+    }
+    span {
+      // span styles
+      text-transform: uppercase;
+      font-weight: 100;
+      letter-spacing: 2px;
+      // add transition
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      will-change: transform;
+      // scale up on hover
+      &:hover {
+        transform: scale(1.25) perspective(1px);
+      }
+    }
+  }
+
+  &[data-letter-animation="breath"] {
+    span {
+      animation: breath 1.2s ease calc(var(--index) * 100 * 1ms) infinite
+        alternate;
+      // span styles
+      text-transform: uppercase;
+      font-weight: 100;
+      letter-spacing: 2px;
+    }
+  }
+}

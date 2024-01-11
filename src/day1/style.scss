@@ -1,0 +1,55 @@
+body {
+}
+
+:root {
+  --src: none;
+}
+
+.container {
+  display: flex;
+  height: 80vh;
+  max-width: 800px;
+  width: 95vw;
+  border: 1px solid #ccc;
+  gap: 1rem;
+  padding: 1rem;
+  @media screen and (max-width: 700px) {
+    gap: 0.5rem;
+    padding: 0;
+  }
+}
+
+.panel {
+  //   background-image: var(--src);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex: 1;
+  border-radius: 50px;
+  transition: flex 0.7s ease-in-out;
+  position: relative;
+  overflow: hidden;
+
+  h3 {
+    position: absolute;
+    opacity: 0;
+    bottom: 1rem;
+    left: 1rem;
+    color: white;
+    width: clamp(40%, 50%, 80%);
+    background-color: rgba(0, 0, 0, 0.475);
+    padding: 1rem;
+    transform: translate(-20px, 20px);
+    text-align: center;
+    border-top-right-radius: 12px;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+}
+
+.active {
+  flex: 20;
+
+  h3 {
+    opacity: 1;
+  }
+}

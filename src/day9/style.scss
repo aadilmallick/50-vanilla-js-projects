@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100vh;
+  position: relative;
+  h2 {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+#gojo {
+  max-width: 25rem;
+  height: auto;
+}
+
+.ball {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: #3ba6d8;
+}

@@ -1,0 +1,89 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+$active-color: #f5f5f5;
+.faq {
+  border: 1px solid #9fa4a8;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  padding-bottom: 0.5rem;
+}
+
+.faq-text {
+  // hide faq content by default
+  transform: scaleY(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.faq-toggle {
+  background-color: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  height: 2rem;
+  width: 2rem;
+  .fa-times {
+    display: none;
+  }
+}
+
+.faq.active {
+  background-color: $active-color;
+  padding-bottom: 2rem;
+
+  // when active, scale back faq content to normal and opacity to normal
+  .faq-text {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  .faq-toggle {
+    background-color: hsl(0, 0%, 90%);
+    .fa-times {
+      display: block;
+    }
+    .fa-chevron-down {
+      display: none;
+    }
+  }
+}
+
+.faq.active::before,
+.faq.active::after {
+  // unicode with font awesome
+  content: "\f075";
+  font-family: "Font Awesome 5 Free";
+  color: #2ecc71;
+  font-size: 7rem;
+  position: absolute;
+  opacity: 0.15;
+  top: 20px;
+  left: 20px;
+  z-index: 0;
+}
+
+.faq.active::before {
+  color: #3498db;
+  top: -10px;
+  left: -30px;
+  transform: rotateY(180deg);
+}
