@@ -43,6 +43,4 @@ const markdownContainer = document.querySelector(
   "#markdown-section"
 ) as HTMLDivElement;
 
-console.log("markdownContainer", markdownContainer);
-
 addREADMESection(3, markdownContainer);

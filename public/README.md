@@ -1,6 +1,80 @@
 # 50 projects 50 days
 
+## Vite Multipage Setup
+
+The basic way is to do this, where you go to `vite.config.ts` and under `build.rollupOptions`, you specify the exact files to make assets from.
+
+In the vite config we can specify multiple entry points:
+
+```ts
+import { defineConfig } from "vite";
+import { resolve } from "path";
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: {
+        // include index.html and sre/day1/index.html as entrypoints
+        index: resolve(__dirname, "./index.html"),
+        day1: resolve(__dirname, "src/day1/index.html"),
+      },
+    },
+  },
+});
+```
+
+For a more programattic setup walking through all the directories you want to find, feel free to inspect this code:
+
+```ts
+import { defineConfig } from "vite";
+import { resolve, join, sep } from "path";
+import * as fs from "fs";
+function getAllIndexHtmlFilePaths(dir: string): string[] {
+  const filepaths: string[] = [];
+  const files = fs.readdirSync(dir);
+
+  for (const file of files) {
+    const filePath = join(dir, file);
+    const stat = fs.statSync(filePath);
+
+    if (stat.isDirectory()) {
+      filepaths.push(...getAllIndexHtmlFilePaths(filePath));
+    } else if (file === "index.html") {
+      filepaths.push(filePath);
+    }
+  }
+
+  return filepaths;
+}
+
+// gets all fielpaths that have index.html in the src directory, like src/day1/index.html
+const indexHtmlFilePaths = getAllIndexHtmlFilePaths("src");
+
+let days = indexHtmlFilePaths.map((path) => {
+  return {
+    [path.split(sep)[1]]: resolve(__dirname, path),
+  };
+});
+
+const newDays = days.reduce((acc, cur) => {
+  return { ...acc, ...cur };
+}, {});
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: {
+        index: resolve(__dirname, "./index.html"),
+        ...newDays,
+      },
+    },
+  },
+});
+```
+
 ## Day 1 - Expanding Cards
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day1)
 
 We have a flex container, each with a **panel**, which is a div with a background image. We set a large height to the flex container, and have the panels stretch to fill the container.
 
@@ -112,6 +186,8 @@ const imagePanels = createImagePanels();
 ```
 
 ## Day 2 - Progress Steps
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day2)
 
 ### HTML structure
 
@@ -310,6 +386,8 @@ function update() {
 
 ## Day 3 - Rotating Navigation
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day3)
+
 1. Put entire page content in a container, like in `.container` class
 2. Fix a hamburger button to the top of the page. When this button is clicked on, we will rotate the entire container 20 degrees.
 3. Navbar is hidden, but gets shown when page is rotated.
@@ -413,13 +491,23 @@ We fix a div at the top left of the screen, translate half of it out of view, an
 
 ## Day 4 - Hidden Search Widget
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day4)
+
 ## Day 5 - Blurry Loading
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day5)
 
 ## Day 6 - Scroll Animation
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day6)
+
 ## Day 7 - Split Landing Page
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day7)
+
 ## Day 8 - Text Letter Animations
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day8)
 
 THe theory behind text letter animations is that we have some text element, and we want to animate each letter in the text element. We can do this by wrapping each letter in a `<span>` element using JavaScript, and then applying animations to each span element.
 
@@ -529,6 +617,9 @@ Then all we do is apply that animation on each individual span.
 
 ## Day 9 - Sound Board + Copy and Paste
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day9)
+
+
 ```ts
 class SoundController {
   constructor(private audioElements: HTMLAudioElement[]) {}
@@ -626,6 +717,9 @@ document.addEventListener("paste", async (e) => {
 
 ## Day 15 - Count increment
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day15)
+
+
 For this follower number cool animation iterator project, we have a simple HTML structure where we use `requestAnimationFrame()` to continuously update the text for the number of followers.
 
 ```html
@@ -715,6 +809,9 @@ const counters = document.querySelectorAll<
 
 ## Day 20 - Button Ripple effect
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day20)
+
+
 This effect is pretty simple. We basically create a white circle, which is a `<span>` element and spawn it at the point at which we click the button. We then animate the circle to grow in size and fade out.
 
 ### HTML
@@ -791,7 +888,10 @@ rippleButton.addEventListener("click", function (e) {
 });
 ```
 
-### Day 24 - Skeleton Loader
+## Day 24 - Skeleton Loader
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day24)
+
 
 Here are the basic styles for skeleton loading utilities:
 
@@ -859,3 +959,218 @@ And here would be an example of HTML using the skeleton loading classes:
 ```
 
 Go [here](src/day24/index.html) to see the example
+
+## Day 27 - Toasts
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day27)
+
+
+### Toast Container
+
+We will have a toast container with the id of `#toasts`, which will have fixed positioning and live at the bottom of the page.
+
+It will be where all the toasts live.
+
+```html
+<div id="toasts"></div>
+```
+
+```scss
+// toast container
+#toasts {
+  // 1. fix position and give high z-index
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+
+  // 2. for spacing between toasts
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+```
+
+### Creating a toast
+
+Before going into the amazing toast manager class, let's talk about the basics of making a toast.
+
+1. Create a toast element, applying the `.toast` class
+
+   ```ts
+   // 1. create element
+   const toast = document.createElement("div");
+   // 2. add classes
+   toast.classList.add("toast");
+   toast.classList.add(`toast-${type}`);
+   // 3. Set toast duration for CSS progress bar animation
+   toast.style.setProperty("--toast-duration", `${3000}ms`);
+   toast.innerText = "This is a toast";
+   ```
+
+2. Add the toast to the toast container
+
+   ```ts
+   // 4. add toast to DOM
+   toastContainer.appendChild(toast);
+   ```
+
+3. After toast duration ends, run toast exit animation and remove toast from DOM
+
+   ```ts
+   // 5. after toast duration ends, run exit animation and remove toast from DOM
+   setTimeout(() => {
+     // run exit animation
+     const animation = toast.element.animate(
+       [{ opacity: 0, transform: "translateX(250px)" }],
+       {
+         duration: 250,
+       }
+     );
+     // wait for animation to finish. then remove toast from DOM
+     animation.onfinish = () => {
+       toast.element.remove();
+     };
+   }, 3000);
+   ```
+
+Here is the basic css, including toast variants:
+
+```scss
+.toast {
+  --color: #333;
+  background-color: white;
+  color: var(--color);
+  border: 1px solid #eee;
+  border-radius: 0.5rem;
+  min-width: 8rem;
+  max-width: 15rem;
+  word-wrap: break-word;
+  padding: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: toast 0.4s ease-in-out;
+  overflow: hidden;
+
+  // progress bar
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0.25rem;
+    background-color: var(--color);
+    // uses javascript-set css variable to set animation duration for progress bar
+    animation: progress var(--toast-duration) linear both;
+    transform-origin: left;
+  }
+
+  // toast variants
+  &.toast-success {
+    --color: #2ecc71;
+  }
+
+  &.toast-warning {
+    --color: #f1c40f;
+  }
+
+  &.toast-danger {
+    --color: #e74c3c;
+  }
+
+  &.toast-info {
+    --color: #3498db;
+  }
+
+  // progress bar animation
+  @keyframes progress {
+    0% {
+      transform: scaleX(0);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  // enter animation
+  @keyframes toast {
+    0% {
+      transform: translateX(100px);
+      opacity: 0;
+    }
+    85% {
+      transform: translateX(-1rem);
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+```
+
+### Toast Manager class
+
+```ts
+
+```
+
+## Day 30 - TypeWriter Effect
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day30)
+
+
+We apply the `typewriter` class to any text element we want to have the typewriter effect.
+
+```html
+<h1 class="typewriter">This is epic.</h1>
+<p class="typewriter">
+  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium fugiat
+  consequatur mollitia dicta eaque saepe quaerat hic non neque possimus quis
+  quibusdam quia voluptatem reiciendis molestiae ipsam placeat illo, tempora
+  aliquid. Voluptatem rem iste quisquam officia voluptatibus impedit obcaecati
+  error.
+</p>
+```
+
+The way we create the typewriter effect is by constantly setting the inner text of the element to be a substring of the original text, adding one char after a delay.
+
+```ts
+const typewriterElements =
+  document.querySelectorAll<HTMLElement>(".typewriter")!;
+
+class TypeWriter {
+  private speed;
+  private currentIndex: number = 1;
+  private timeoutId: number | null = null;
+  private text: string = "";
+  constructor(public element: HTMLElement, charsPerSecond: number = 20) {
+    this.speed = 1000 / charsPerSecond;
+    this.text = element.innerText;
+  }
+
+  write() {
+    // get substring of text
+    const curText = this.text.slice(0, this.currentIndex);
+
+    // end recursive loop if we have reached the end of the text
+    if (this.currentIndex > this.text.length) {
+      return;
+    }
+    this.element.innerText = curText;
+
+    // recursive setTimeout call
+    setTimeout(() => {
+      this.currentIndex++;
+      this.write();
+    }, this.speed);
+  }
+
+  // sets timeout delay for changing typewriter effect speed
+  setSpeed(charsPerSecond: number) {
+    this.speed = 1000 / charsPerSecond;
+  }
+}
+```

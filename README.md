@@ -74,6 +74,8 @@ export default defineConfig({
 
 ## Day 1 - Expanding Cards
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day1)
+
 We have a flex container, each with a **panel**, which is a div with a background image. We set a large height to the flex container, and have the panels stretch to fill the container.
 
 The principle behind the expanding cards is using the `flex` property to control width, and applying a transition on it. The panel we click on we will add a class such that its flex value is large while its siblings' flex value is small.
@@ -184,6 +186,8 @@ const imagePanels = createImagePanels();
 ```
 
 ## Day 2 - Progress Steps
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day2)
 
 ### HTML structure
 
@@ -382,6 +386,8 @@ function update() {
 
 ## Day 3 - Rotating Navigation
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day3)
+
 1. Put entire page content in a container, like in `.container` class
 2. Fix a hamburger button to the top of the page. When this button is clicked on, we will rotate the entire container 20 degrees.
 3. Navbar is hidden, but gets shown when page is rotated.
@@ -485,13 +491,23 @@ We fix a div at the top left of the screen, translate half of it out of view, an
 
 ## Day 4 - Hidden Search Widget
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day4)
+
 ## Day 5 - Blurry Loading
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day5)
 
 ## Day 6 - Scroll Animation
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day6)
+
 ## Day 7 - Split Landing Page
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day7)
+
 ## Day 8 - Text Letter Animations
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day8)
 
 THe theory behind text letter animations is that we have some text element, and we want to animate each letter in the text element. We can do this by wrapping each letter in a `<span>` element using JavaScript, and then applying animations to each span element.
 
@@ -601,6 +617,9 @@ Then all we do is apply that animation on each individual span.
 
 ## Day 9 - Sound Board + Copy and Paste
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day9)
+
+
 ```ts
 class SoundController {
   constructor(private audioElements: HTMLAudioElement[]) {}
@@ -698,6 +717,9 @@ document.addEventListener("paste", async (e) => {
 
 ## Day 15 - Count increment
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day15)
+
+
 For this follower number cool animation iterator project, we have a simple HTML structure where we use `requestAnimationFrame()` to continuously update the text for the number of followers.
 
 ```html
@@ -787,6 +809,9 @@ const counters = document.querySelectorAll<
 
 ## Day 20 - Button Ripple effect
 
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day20)
+
+
 This effect is pretty simple. We basically create a white circle, which is a `<span>` element and spawn it at the point at which we click the button. We then animate the circle to grow in size and fade out.
 
 ### HTML
@@ -863,7 +888,10 @@ rippleButton.addEventListener("click", function (e) {
 });
 ```
 
-### Day 24 - Skeleton Loader
+## Day 24 - Skeleton Loader
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day24)
+
 
 Here are the basic styles for skeleton loading utilities:
 
@@ -933,6 +961,9 @@ And here would be an example of HTML using the skeleton loading classes:
 Go [here](src/day24/index.html) to see the example
 
 ## Day 27 - Toasts
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day27)
+
 
 ### Toast Container
 
@@ -1087,6 +1118,9 @@ Here is the basic css, including toast variants:
 ```
 
 ## Day 30 - TypeWriter Effect
+
+![example: ](https://github.com/aadilmallick/50-vanilla-js-projects/tree/main/src/day30)
+
 
 We apply the `typewriter` class to any text element we want to have the typewriter effect.
 

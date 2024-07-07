@@ -35,6 +35,7 @@ body {
     transform: translate(-50%);
     z-index: 10;
     white-space: nowrap;
+    transition: font-size 0.5s ease;
   }
   .btn {
     display: inline-block;
@@ -75,4 +76,9 @@ body {
 .hover-left,
 .hover-right {
   flex: 3 !important;
+}
+
+body:has(.hover-right) .split.left h1,
+body:has(.hover-left) .split.right h1 {
+  font-size: 2rem;
 }

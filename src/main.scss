@@ -32,6 +32,8 @@ body {
   margin: 0 auto;
   padding: 1rem;
   margin-top: 5rem;
+  font-weight: normal;
+  font-size: 1rem;
 
   @for $i from 1 through 6 {
     h#{$i} {
